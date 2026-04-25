@@ -53,8 +53,8 @@
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   /* Spacing customizations (keep Tailwind's default scale too) */
-  --spacing-nav-mobile: 56px;
-  --spacing-nav-desktop: 72px;
+  --spacing-nav-mobile: 68px;
+  --spacing-nav-desktop: 80px;
 }
 
 /* Root variables for use in plain CSS (not part of Tailwind tokens) */

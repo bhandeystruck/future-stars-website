@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import { Button, WhatsAppButton } from "./Primitives";
 
 const NAV = [
@@ -27,7 +28,7 @@ function AnnouncementBar() {
 function Brand() {
   return (
     <Link className="nav-brand" href="/">
-      <div className="mark">FS</div>
+      <Image src="/logo.png" alt="Future Stars" width={52} height={52} style={{ display: "block", objectFit: "contain" }} />
       <div className="word">
         Future Stars
         <small className="np-accent">फ्यूचर स्टार्स उ.मा.वि.</small>

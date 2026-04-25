@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { WhatsAppButton, BSDate } from "./Primitives";
 
 export default function Footer() {
@@ -8,7 +9,7 @@ export default function Footer() {
         <div className="footer-grid">
           <div>
             <div className="brand">
-              <div className="mark">FS</div>
+              <Image src="/logo.png" alt="Future Stars" width={56} height={56} style={{ display: "block", objectFit: "contain" }} />
               <div className="word">Future Stars</div>
             </div>
             <p className="desc">

@@ -18,7 +18,7 @@ export default async function Home({
   searchParams: Promise<{ hero?: string }>;
 }) {
   const { hero } = await searchParams;
-  const variant: HeroVariant = isHeroVariant(hero) ? hero : "editorial";
+  const variant: HeroVariant = isHeroVariant(hero) ? hero : "bleed";
 
   const [news, teachers] = await Promise.all([getNews(), getTeachers()]);
 
@@ -30,9 +30,9 @@ export default async function Home({
       <StreamsSection />
       <MissionBand />
       <TestimonialSection />
+      <TeachersSection items={teachers} />
       <NewsSection items={news} />
       <AdmissionsSection />
-      <TeachersSection items={teachers} />
     </main>
   );
 }

@@ -121,9 +121,10 @@ function HeroBleed() {
         <Pill tone="amber" icon={Calendar}>
           Admissions open · 2083 BS
         </Pill>
-        <h1 style={{ marginTop: 20 }}>
+        <h1>
           A school where your child is <em>known by name.</em>
         </h1>
+        <p className="np-line">एउटा विद्यालय, जहाँ तपाईंको बच्चाको नाम थाहा छ।</p>
         <p className="lead">
           480 students. 34 teachers. NEB-affiliated since 2064 BS — a quiet
           kind of excellence, in the heart of Kathmandu.
@@ -137,15 +138,27 @@ function HeroBleed() {
           </Button>
         </div>
       </div>
-      <div className="bleed-meta">
-        <div>
-          <strong>480</strong>Students, Grades 6–12
-        </div>
-        <div>
-          <strong>1:14</strong>Teacher-to-student ratio
-        </div>
-        <div>
-          <strong>92%</strong>+2 pass rate · 3-yr avg
+      <div className="bleed-stats">
+        <div className="container bleed-stats-row">
+          <div className="bleed-stat">
+            <strong>480</strong>
+            <span>Students, Grades 6–12</span>
+          </div>
+          <div className="bleed-stat-sep" />
+          <div className="bleed-stat">
+            <strong>1:14</strong>
+            <span>Teacher-to-student ratio</span>
+          </div>
+          <div className="bleed-stat-sep" />
+          <div className="bleed-stat">
+            <strong>92%</strong>
+            <span>+2 pass rate · 3-yr avg</span>
+          </div>
+          <div className="bleed-stat-sep" />
+          <div className="bleed-stat">
+            <strong>2064 BS</strong>
+            <span>NEB-affiliated since</span>
+          </div>
         </div>
       </div>
     </section>
@@ -215,7 +228,7 @@ function HeroStat() {
    Switcher — renders the selected variant
    ========================================================================== */
 export default function HeroSwitcher({
-  variant = "editorial",
+  variant = "bleed",
 }: {
   variant?: HeroVariant;
 }) {
