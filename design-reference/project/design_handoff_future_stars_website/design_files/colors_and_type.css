@@ -1,0 +1,174 @@
+/* ==========================================================================
+   Future Stars High School Nepal — Design Tokens
+   Import this file once at the root of any page to get all variables.
+   ========================================================================== */
+
+/* Google Fonts substitutions — no licensed fonts were provided.
+   Replace with @font-face rules pointing at local files in /fonts when available. */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap');
+
+:root {
+  /* ---------- Color — Brand ---------- */
+  --color-primary:       #1B4F8C;  /* Deep navy — nav, headlines */
+  --color-primary-700:   #153F72;  /* Hover/pressed navy */
+  --color-primary-100:   #E8F4FF;  /* Section tint — "Sky" */
+
+  --color-accent:        #F5A623;  /* Warm amber — CTAs */
+  --color-accent-700:    #E09614;  /* Amber hover */
+  --color-accent-ink:    #412402;  /* Text on amber (not black) */
+
+  --color-success:       #1D9E75;  /* Forest teal — badges, WhatsApp CTA */
+  --color-success-700:   #188863;
+
+  /* ---------- Color — Neutrals ---------- */
+  --color-bg:            #F9F6F0;  /* Warm off-white — page bg */
+  --color-bg-tint:       #E8F4FF;  /* Section tint — alternating blocks */
+  --color-surface:       #FFFFFF;  /* Cards */
+  --color-surface-alt:   #FBFAF6;  /* Very subtle alt */
+
+  --color-text:          #2C2C2A;  /* Body */
+  --color-text-muted:    #5F5E5A;  /* Secondary */
+  --color-text-inverse:  #FFFFFF;  /* On navy */
+
+  --color-border:        #E8E4DD;  /* Hairline */
+  --color-border-strong: #C9C3B6;
+
+  /* ---------- Typography ---------- */
+  --font-display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --font-body:    "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-np:      "Noto Sans Devanagari", "Inter", sans-serif;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* Type scale — mobile defaults; desktop overrides below */
+  --fs-h1:      32px;  --lh-h1: 1.15;
+  --fs-h2:      24px;  --lh-h2: 1.25;
+  --fs-h3:      18px;  --lh-h3: 1.3;
+  --fs-body:    16px;  --lh-body: 1.7;
+  --fs-small:   14px;  --lh-small: 1.5;
+  --fs-caption: 13px;  --lh-caption: 1.5;
+  --fs-stat:    40px;  --lh-stat: 1;
+
+  /* ---------- Spacing (4-pt) ---------- */
+  --s-1:   4px;
+  --s-2:   8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-6:  24px;
+  --s-8:  32px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-20: 80px;
+  --s-24: 96px;
+
+  /* Content */
+  --content-max: 1200px;
+  --gutter: 16px;
+
+  /* ---------- Radii ---------- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;   /* buttons, inputs */
+  --radius-md: 12px;  /* cards */
+  --radius-lg: 16px;  /* modals */
+  --radius-pill: 999px;
+
+  /* ---------- Shadows (warm navy tint) ---------- */
+  --shadow-sm: 0 1px 2px rgba(27, 79, 140, 0.06);
+  --shadow-md: 0 6px 20px rgba(27, 79, 140, 0.10);
+  --shadow-lg: 0 16px 40px rgba(27, 79, 140, 0.14);
+  --shadow-focus: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-primary);
+
+  /* ---------- Motion ---------- */
+  --ease-out:    cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast:    120ms;
+  --dur-base:    150ms;
+  --dur-slow:    200ms;
+
+  /* ---------- Layout ---------- */
+  --nav-h-mobile: 56px;
+  --nav-h-desktop: 72px;
+  --section-y-mobile: 48px;
+  --section-y-desktop: 80px;
+
+  /* ---------- Components ---------- */
+  --btn-h: 52px;
+  --btn-h-sm: 40px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --fs-h1:   48px;
+    --fs-h2:   32px;
+    --fs-h3:   22px;
+    --fs-stat: 56px;
+    --gutter:  24px;
+  }
+}
+
+/* ==========================================================================
+   Semantic element styles — opt in by importing this stylesheet.
+   ========================================================================== */
+
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  color: var(--color-primary);
+  margin: 0 0 var(--s-4);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-h1); line-height: var(--lh-h1); letter-spacing: -0.02em; }
+h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); }
+h3 { font-size: var(--fs-h3); line-height: var(--lh-h3); }
+
+p { margin: 0 0 var(--s-4); text-wrap: pretty; }
+p.lead { font-size: 18px; color: var(--color-text); }
+small, .caption { font-size: var(--fs-caption); line-height: var(--lh-caption); color: var(--color-text-muted); }
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+}
+a:hover { border-bottom-color: currentColor; }
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: var(--s-8) 0;
+}
+
+/* Utility */
+.container {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-stat);
+  line-height: var(--lh-stat);
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}

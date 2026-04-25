@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Future Stars — Website designs</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #f0eee9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+    iframe { border: 0; display: block; background: #F9F6F0; }
+    .ab-frame { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" src="frames/design-canvas.jsx"></script>
+  <script type="text/babel">
+    const { useRef, useEffect } = React;
+
+    // Each artboard loads the site in an iframe, with a hash route so the
+    // page persists its state. We also force a default page per artboard
+    // via URL hash so you always land on the intended view.
+    function SiteFrame({ page = "home", hero }) {
+      const src = `site/index.html?page=${page}${hero ? `&hero=${hero}` : ""}`;
+      return (
+        <iframe src={src} className="ab-frame"
+                style={{ width: "100%", height: "100%" }} />
+      );
+    }
+
+    function App() {
+      return (
+        <DesignCanvas title="Future Stars High School — Website"
+                      subtitle="Mobile + desktop, four hero variants. Click any artboard's ⤢ to focus.">
+          <DCSection id="home-mobile" title="Home · mobile (375)"
+                     subtitle="Four hero treatments — editorial is the default.">
+            <DCArtboard id="h-edit-m" label="Editorial · default" width={375} height={812}>
+              <SiteFrame page="home" hero="editorial" />
+            </DCArtboard>
+            <DCArtboard id="h-split-m" label="Split hero" width={375} height={812}>
+              <SiteFrame page="home" hero="split" />
+            </DCArtboard>
+            <DCArtboard id="h-bleed-m" label="Full-bleed" width={375} height={812}>
+              <SiteFrame page="home" hero="bleed" />
+            </DCArtboard>
+            <DCArtboard id="h-stat-m" label="Stat-led" width={375} height={812}>
+              <SiteFrame page="home" hero="stat" />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="home-desktop" title="Home · desktop (1280)"
+                     subtitle="Same four variants, full-width.">
+            <DCArtboard id="h-edit-d" label="Editorial · default" width={1280} height={900}>
+              <SiteFrame page="home" hero="editorial" />
+            </DCArtboard>
+            <DCArtboard id="h-bleed-d" label="Full-bleed" width={1280} height={900}>
+              <SiteFrame page="home" hero="bleed" />
+            </DCArtboard>
+            <DCArtboard id="h-stat-d" label="Stat-led" width={1280} height={900}>
+              <SiteFrame page="home" hero="stat" />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="pages-desktop" title="Secondary pages · desktop"
+                     subtitle="Programs, Admissions, Student life, About, Contact.">
+            <DCArtboard id="p-progs" label="Programs" width={1280} height={900}>
+              <SiteFrame page="programs" />
+            </DCArtboard>
+            <DCArtboard id="p-adm" label="Admissions" width={1280} height={900}>
+              <SiteFrame page="admissions" />
+            </DCArtboard>
+            <DCArtboard id="p-life" label="Student life" width={1280} height={900}>
+              <SiteFrame page="life" />
+            </DCArtboard>
+            <DCArtboard id="p-about" label="About" width={1280} height={900}>
+              <SiteFrame page="about" />
+            </DCArtboard>
+            <DCArtboard id="p-contact" label="Contact" width={1280} height={900}>
+              <SiteFrame page="contact" />
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="pages-mobile" title="Secondary pages · mobile">
+            <DCArtboard id="pm-progs" label="Programs" width={375} height={812}>
+              <SiteFrame page="programs" />
+            </DCArtboard>
+            <DCArtboard id="pm-adm" label="Admissions" width={375} height={812}>
+              <SiteFrame page="admissions" />
+            </DCArtboard>
+            <DCArtboard id="pm-life" label="Student life" width={375} height={812}>
+              <SiteFrame page="life" />
+            </DCArtboard>
+            <DCArtboard id="pm-about" label="About" width={375} height={812}>
+              <SiteFrame page="about" />
+            </DCArtboard>
+            <DCArtboard id="pm-contact" label="Contact" width={375} height={812}>
+              <SiteFrame page="contact" />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

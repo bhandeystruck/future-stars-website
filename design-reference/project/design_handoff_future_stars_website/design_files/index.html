@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Future Stars High School — Site</title>
+  <link rel="stylesheet" href="colors_and_type.css">
+  <link rel="stylesheet" href="kit.css">
+  <link rel="stylesheet" href="kit-extra.css">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="Primitives.jsx"></script>
+  <script type="text/babel" src="TopNav.jsx"></script>
+  <script type="text/babel" src="Heroes.jsx"></script>
+  <script type="text/babel" src="HomeSections.jsx"></script>
+  <script type="text/babel" src="Pages.jsx"></script>
+  <script type="text/babel" src="Footer.jsx"></script>
+  <script type="text/babel" src="Tweaks.jsx"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function App() {
+      const [page, setPage] = useState(() => {
+        const p = new URLSearchParams(location.search);
+        return p.get("page") || localStorage.getItem("fs-page") || "home";
+      });
+      const [form, setForm] = useState({ name: "", phone: "", stream: "Grade 11 · Science" });
+      const [submitted, setSubmitted] = useState(false);
+      const [tweaks, setTweaks] = useState(() => {
+        const p = new URLSearchParams(location.search);
+        const hero = p.get("hero");
+        return { ...TWEAK_DEFAULTS, ...(hero ? { heroVariant: hero } : {}) };
+      });
+      const [tweaksVisible, setTweaksVisible] = useState(false);
+
+      useEffect(() => { localStorage.setItem("fs-page", page); }, [page]);
+      useEffect(() => { window.scrollTo(0, 0); }, [page]);
+
+      // Apply tweaks to <body>
+      useEffect(() => {
+        document.body.dataset.emphasis = tweaks.emphasis;
+        document.body.dataset.density = tweaks.density;
+        document.body.dataset.devanagari = tweaks.devanagari;
+      }, [tweaks]);
+
+      // Tweaks host protocol
+      useEffect(() => {
+        const onMsg = (e) => {
+          if (!e.data || typeof e.data !== "object") return;
+          if (e.data.type === "__activate_edit_mode") setTweaksVisible(true);
+          if (e.data.type === "__deactivate_edit_mode") setTweaksVisible(false);
+        };
+        window.addEventListener("message", onMsg);
+        try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch {}
+        return () => window.removeEventListener("message", onMsg);
+      }, []);
+
+      // Re-run Lucide icon replacement on page/tweak/variant change
+      useEffect(() => {
+        const t = setTimeout(() => { try { lucide.createIcons(); } catch {} }, 40);
+        return () => clearTimeout(t);
+      });
+
+      const onNav = (id) => { setPage(id); setSubmitted(false); };
+      const onSubmit = () => setSubmitted(true);
+
+      return (
+        <div className="page" data-screen-label="Future Stars site">
+          <TopNav page={page} onNav={onNav} />
+          {page === "home" && (
+            <>
+              <HeroSwitcher variant={tweaks.heroVariant} onNav={onNav} />
+              <TrustStrip />
+              <StatsSection />
+              <StreamsSection onNav={onNav} />
+              <MissionBand />
+              <TestimonialSection />
+              <NewsSection />
+              <AdmissionsSection form={form} setForm={setForm} submitted={submitted} onSubmit={onSubmit} />
+            </>
+          )}
+          {page === "programs" && <ProgramsPage onNav={onNav} />}
+          {page === "admissions" && (
+            <AdmissionsSection form={form} setForm={setForm} submitted={submitted} onSubmit={onSubmit} />
+          )}
+          {page === "life" && <LifePage />}
+          {page === "about" && <AboutPage />}
+          {page === "contact" && <ContactPage />}
+          <Footer onNav={onNav} />
+          <FloatingWhatsApp />
+          <TweaksPanel tweaks={tweaks} setTweaks={setTweaks} visible={tweaksVisible} />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
