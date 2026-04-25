@@ -1,10 +1,11 @@
 /**
  * Content module — types + fallback data for news, teachers, etc.
  *
- * The exported fetchers (`getNews`, `getTeachers`) return the fallback data
- * today. When Sanity is wired (see src/lib/sanity.ts), they'll query the CMS
- * and fall back to this data if credentials/network are missing.
+ * The exported fetchers (`getNews`, `getTeachers`) query Sanity when
+ * NEXT_PUBLIC_SANITY_PROJECT_ID is set, and fall back to static data otherwise.
  */
+
+import { sanityClient } from "./sanity";
 
 export type NewsTag = "event" | "results" | "news";
 
@@ -75,12 +76,41 @@ const FALLBACK_TEACHERS: Teacher[] = [
   { id: "dipesh-basnet", name: "Dipesh Basnet", role: "Maths · Grade 9–12", initials: "DB" },
 ];
 
-/** Get news/events — today this returns fallback; Sanity plugs in later. */
+/** Get news/events — queries Sanity if configured, otherwise returns fallback. */
 export async function getNews(): Promise<NewsItem[]> {
-  return FALLBACK_NEWS;
+  if (!sanityClient) return FALLBACK_NEWS;
+  try {
+    const items = await sanityClient.fetch<NewsItem[]>(
+      `*[_type == "news"] | order(_createdAt desc) {
+        "id": id.current,
+        day,
+        month,
+        year,
+        title,
+        excerpt,
+        tag
+      }`
+    );
+    return items.length ? items : FALLBACK_NEWS;
+  } catch {
+    return FALLBACK_NEWS;
+  }
 }
 
-/** Get teachers — today this returns fallback; Sanity plugs in later. */
+/** Get teachers — queries Sanity if configured, otherwise returns fallback. */
 export async function getTeachers(): Promise<Teacher[]> {
-  return FALLBACK_TEACHERS;
+  if (!sanityClient) return FALLBACK_TEACHERS;
+  try {
+    const items = await sanityClient.fetch<Teacher[]>(
+      `*[_type == "teacher"] | order(order asc) {
+        "id": id.current,
+        name,
+        role,
+        initials
+      }`
+    );
+    return items.length ? items : FALLBACK_TEACHERS;
+  } catch {
+    return FALLBACK_TEACHERS;
+  }
 }

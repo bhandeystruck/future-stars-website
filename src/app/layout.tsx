@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
+import TopNav from "@/components/TopNav";
+import Footer from "@/components/Footer";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -39,7 +42,12 @@ export default function RootLayout({
       lang="en"
       className={`${jakarta.variable} ${inter.variable} ${devanagari.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <TopNav />
+        {children}
+        <Footer />
+        <FloatingWhatsApp />
+      </body>
     </html>
   );
 }

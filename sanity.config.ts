@@ -1,0 +1,20 @@
+import { defineConfig } from "sanity";
+import { structureTool } from "sanity/structure";
+import { visionTool } from "@sanity/vision";
+import { newsSchema } from "./sanity/schemas/news";
+import { teacherSchema } from "./sanity/schemas/teacher";
+
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
+
+export default defineConfig({
+  name: "future-stars",
+  title: "Future Stars Website",
+  projectId,
+  dataset,
+  basePath: "/studio",
+  plugins: [structureTool(), visionTool()],
+  schema: {
+    types: [newsSchema, teacherSchema],
+  },
+});
