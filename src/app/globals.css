@@ -1,0 +1,158 @@
+@import "tailwindcss";
+@import "./components.css";
+
+/* ==========================================================================
+   Future Stars High School Nepal — Design Tokens (Tailwind v4 @theme)
+   Ported from project/site/colors_and_type.css
+   ========================================================================== */
+
+@theme {
+  /* Brand colors */
+  --color-primary: #1B4F8C;
+  --color-primary-700: #153F72;
+  --color-primary-100: #E8F4FF;
+
+  --color-accent: #F5A623;
+  --color-accent-700: #E09614;
+  --color-accent-ink: #412402;
+
+  --color-success: #1D9E75;
+  --color-success-700: #188863;
+
+  /* Neutrals */
+  --color-bg: #F9F6F0;
+  --color-bg-tint: #E8F4FF;
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #FBFAF6;
+
+  --color-text: #2C2C2A;
+  --color-text-muted: #5F5E5A;
+  --color-text-inverse: #FFFFFF;
+
+  --color-border: #E8E4DD;
+  --color-border-strong: #C9C3B6;
+
+  /* Typography — next/font injects these CSS vars */
+  --font-display: var(--font-jakarta), "Segoe UI", system-ui, sans-serif;
+  --font-body: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  --font-np: var(--font-devanagari), var(--font-inter), sans-serif;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(27, 79, 140, 0.06);
+  --shadow-md: 0 6px 20px rgba(27, 79, 140, 0.10);
+  --shadow-lg: 0 16px 40px rgba(27, 79, 140, 0.14);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Spacing customizations (keep Tailwind's default scale too) */
+  --spacing-nav-mobile: 56px;
+  --spacing-nav-desktop: 72px;
+}
+
+/* Root variables for use in plain CSS (not part of Tailwind tokens) */
+:root {
+  --content-max: 1200px;
+  --gutter: 16px;
+  --fs-h1: 32px;
+  --lh-h1: 1.15;
+  --fs-h2: 24px;
+  --lh-h2: 1.25;
+  --fs-h3: 18px;
+  --lh-h3: 1.3;
+  --fs-body: 16px;
+  --lh-body: 1.7;
+  --fs-caption: 13px;
+  --lh-caption: 1.5;
+  --fs-stat: 40px;
+  --lh-stat: 1;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --fs-h1: 48px;
+    --fs-h2: 32px;
+    --fs-h3: 22px;
+    --fs-stat: 56px;
+    --gutter: 24px;
+  }
+}
+
+/* ==========================================================================
+   Base element styles
+   ========================================================================== */
+
+html {
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+}
+h3 {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+}
+
+p {
+  margin: 0 0 16px;
+  text-wrap: pretty;
+}
+small,
+.caption {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  color: var(--color-text-muted);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 150ms var(--ease-out), color 150ms var(--ease-out);
+}
+a:hover {
+  border-bottom-color: currentColor;
+}
