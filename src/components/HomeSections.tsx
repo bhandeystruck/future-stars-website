@@ -1,6 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Award, MapPin, ShieldCheck, Users } from "lucide-react";
 import { PhotoPlaceholder, StatBlock } from "./Primitives";
+import type { Principal } from "@/lib/content";
+import { urlFor } from "@/lib/sanity";
 
 /* ==========================================================================
    EditSecHead — editorial section header (01/02/03 · eyebrow · h2 · aside)
@@ -160,6 +163,51 @@ export function TestimonialSection() {
             <strong>Sunita Karki</strong> · Parent, Grade 11 Science · Baneshwor
           </div>
         </div>
+        
+      </div>
+    </section>
+  );
+}
+
+/* ==========================================================================
+   PrincipalSection — photo left, message right
+   ========================================================================== */
+export function PrincipalSection({ data }: { data: Principal }) {
+  const imgUrl = data.image
+    ? urlFor(data.image)?.width(600).height(800).fit("crop").auto("format").url()
+    : null;
+
+  return (
+    <section className="section tint">
+      <div className="container">
+        <div className="principal-grid">
+
+          {/* Photo column */}
+          <div className="principal-photo-col">
+            <div className="principal-photo">
+              {imgUrl ? (
+                <Image src={imgUrl} alt={data.name} fill sizes="(max-width:1023px) 80vw, 400px" style={{ objectFit: "cover" }} />
+              ) : (
+                <PhotoPlaceholder label={`Principal · ${data.name}`} tone="navy" />
+              )}
+            </div>
+          </div>
+
+          {/* Text column */}
+          <div className="principal-body">
+            <div className="eyebrow">From the Principal&apos;s Desk</div>
+            <div className="rule" style={{ height: 1, background: "var(--color-border-strong)", margin: "12px 0 20px" }} />
+            {data.quote && <h2 className="principal-heading">{data.quote}</h2>}
+            {data.para1 && <p className="principal-sub">{data.para1}</p>}
+            {data.para2 && <p className="principal-body-text">{data.para2}</p>}
+            {data.para3 && <p className="principal-body-text">{data.para3}</p>}
+            <div className="principal-sig">
+              <div className="principal-sig-name">{data.name}</div>
+              <div className="principal-sig-role">{data.role}</div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
   );
@@ -176,12 +224,11 @@ export function MissionBand() {
           Our promise
         </div>
         <h2>
-          We do not chase rankings. We chase the quiet moments where a student
-          asks the question she&apos;s been holding for a week.
+          Our mission is to help students grow with active and creative minds, striving them to develop a sense of understanding and compassion for others.
         </h2>
         <p style={{ marginTop: 20 }}>
           Future Stars opened in 2064 BS with 38 students in a single building
-          in Kathmandu. Today we are Grades 6–12 — still small enough that every
+          in Lalitpur. Today we are Grades 1–10 — connected enough that every
           teacher knows every student by name.
         </p>
         <div className="mission-grid">

@@ -9,6 +9,12 @@ export const teacherSchema = defineType({
     defineField({ name: "name", title: "Full name", type: "string", validation: (r) => r.required() }),
     defineField({ name: "role", title: "Role", type: "string", description: "e.g. Principal · Physics", validation: (r) => r.required() }),
     defineField({ name: "initials", title: "Initials", type: "string", description: "e.g. AS", validation: (r) => r.required().max(3) }),
+    defineField({
+      name: "image",
+      title: "Portrait photo",
+      type: "image",
+      options: { hotspot: true },
+    }),
     defineField({ name: "order", title: "Display order", type: "number" }),
   ],
   orderings: [{ title: "Display order", name: "orderAsc", by: [{ field: "order", direction: "asc" }] }],

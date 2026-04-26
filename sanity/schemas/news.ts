@@ -15,6 +15,12 @@ export const newsSchema = defineType({
       options: { list: ["event", "results", "news"] },
       validation: (r) => r.required(),
     }),
+    defineField({
+      name: "image",
+      title: "Cover image",
+      type: "image",
+      options: { hotspot: true },
+    }),
     defineField({ name: "day", title: "Day (BS)", type: "string", description: "e.g. 08" }),
     defineField({ name: "month", title: "Month (BS)", type: "string", description: "e.g. Baishakh" }),
     defineField({ name: "year", title: "Year (BS)", type: "string", description: "e.g. 2083" }),

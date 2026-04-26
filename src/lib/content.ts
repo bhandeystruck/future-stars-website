@@ -1,11 +1,5 @@
-/**
- * Content module — types + fallback data for news, teachers, etc.
- *
- * The exported fetchers (`getNews`, `getTeachers`) query Sanity when
- * NEXT_PUBLIC_SANITY_PROJECT_ID is set, and fall back to static data otherwise.
- */
-
 import { sanityClient } from "./sanity";
+import type { SanityImage } from "./sanity";
 
 export type NewsTag = "event" | "results" | "news";
 
@@ -17,6 +11,7 @@ export type NewsItem = {
   title: string;
   excerpt: string;
   tag: NewsTag;
+  image?: SanityImage;
 };
 
 export type Teacher = {
@@ -24,6 +19,24 @@ export type Teacher = {
   name: string;
   role: string;
   initials: string;
+  image?: SanityImage;
+};
+
+export type LifePhoto = {
+  _id: string;
+  label: string;
+  category: string;
+  image: SanityImage;
+};
+
+export type Principal = {
+  name: string;
+  role: string;
+  quote?: string;
+  para1?: string;
+  para2?: string;
+  para3?: string;
+  image?: SanityImage;
 };
 
 const FALLBACK_NEWS: NewsItem[] = [
@@ -33,8 +46,7 @@ const FALLBACK_NEWS: NewsItem[] = [
     month: "Baishakh",
     year: "2083",
     title: "Open house for 2083 BS applicants",
-    excerpt:
-      "Tour classrooms, meet the principal, bring every hard question. Sun–Fri, 10am–3pm.",
+    excerpt: "Tour classrooms, meet the principal, bring every hard question. Sun–Fri, 10am–3pm.",
     tag: "event",
   },
   {
@@ -43,8 +55,7 @@ const FALLBACK_NEWS: NewsItem[] = [
     month: "Chaitra",
     year: "2082",
     title: "92% of our +2 cohort passed NEB first attempt",
-    excerpt:
-      "Nine students scored above 3.8 GPA across Science and Management streams.",
+    excerpt: "Nine students scored above 3.8 GPA across Science and Management streams.",
     tag: "results",
   },
   {
@@ -53,8 +64,7 @@ const FALLBACK_NEWS: NewsItem[] = [
     month: "Chaitra",
     year: "2082",
     title: "Grade 9 community research project — published",
-    excerpt:
-      "A 40-page report on waste management in Baneshwor, researched, written, printed by students.",
+    excerpt: "A 40-page report on waste management in Baneshwor, researched, written, printed by students.",
     tag: "news",
   },
   {
@@ -63,8 +73,7 @@ const FALLBACK_NEWS: NewsItem[] = [
     month: "Falgun",
     year: "2082",
     title: "Annual Himalayan trek — Mardi Himal, Grade 10",
-    excerpt:
-      "Five days, three teachers, thirty-two students. Nobody turned back.",
+    excerpt: "Five days, three teachers, thirty-two students. Nobody turned back.",
     tag: "news",
   },
 ];
@@ -76,19 +85,26 @@ const FALLBACK_TEACHERS: Teacher[] = [
   { id: "dipesh-basnet", name: "Dipesh Basnet", role: "Maths · Grade 9–12", initials: "DB" },
 ];
 
-/** Get news/events — queries Sanity if configured, otherwise returns fallback. */
+const FALLBACK_PRINCIPAL: Principal = {
+  name: "Manju Karki",
+  role: "Principal · B.Ed, M.Ed (TU) · Est. 2064 BS",
+  quote: "Every child who walks through our gate deserves to be seen — not just taught.",
+  para1:
+    "When I joined Future Stars in 2064 BS, we had 38 students and one building. What we had in abundance was a belief: that a small school could do something a large school cannot — know every child by name, and mean it.",
+  para2:
+    "Today, with 480 students across Grades 6–12, that belief is harder to keep. We keep it anyway. Our teachers are hired for care as much as for subject knowledge. Our afternoons are structured so no student falls behind quietly. Our doors — mine included — are open every Friday for parents who have questions they've been holding all week.",
+  para3:
+    "If you are considering Future Stars for your child, come and visit. Sit in a class. Watch the morning assembly. Ask the hard questions. We have nothing to hide and everything to show.",
+};
+
 export async function getNews(): Promise<NewsItem[]> {
   if (!sanityClient) return FALLBACK_NEWS;
   try {
     const items = await sanityClient.fetch<NewsItem[]>(
       `*[_type == "news"] | order(_createdAt desc) {
         "id": id.current,
-        day,
-        month,
-        year,
-        title,
-        excerpt,
-        tag
+        day, month, year, title, excerpt, tag,
+        image { asset, hotspot, crop }
       }`
     );
     return items.length ? items : FALLBACK_NEWS;
@@ -97,20 +113,47 @@ export async function getNews(): Promise<NewsItem[]> {
   }
 }
 
-/** Get teachers — queries Sanity if configured, otherwise returns fallback. */
 export async function getTeachers(): Promise<Teacher[]> {
   if (!sanityClient) return FALLBACK_TEACHERS;
   try {
     const items = await sanityClient.fetch<Teacher[]>(
       `*[_type == "teacher"] | order(order asc) {
         "id": id.current,
-        name,
-        role,
-        initials
+        name, role, initials,
+        image { asset, hotspot, crop }
       }`
     );
     return items.length ? items : FALLBACK_TEACHERS;
   } catch {
     return FALLBACK_TEACHERS;
+  }
+}
+
+export async function getPrincipal(): Promise<Principal> {
+  if (!sanityClient) return FALLBACK_PRINCIPAL;
+  try {
+    const item = await sanityClient.fetch<Principal | null>(
+      `*[_type == "principal"][0] {
+        name, role, quote, para1, para2, para3,
+        image { asset, hotspot, crop }
+      }`
+    );
+    return item ?? FALLBACK_PRINCIPAL;
+  } catch {
+    return FALLBACK_PRINCIPAL;
+  }
+}
+
+export async function getLifePhotos(): Promise<LifePhoto[]> {
+  if (!sanityClient) return [];
+  try {
+    return await sanityClient.fetch<LifePhoto[]>(
+      `*[_type == "lifePhoto"] | order(order asc) {
+        _id, label, category,
+        image { asset, hotspot, crop }
+      }`
+    );
+  } catch {
+    return [];
   }
 }

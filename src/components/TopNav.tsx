@@ -30,7 +30,7 @@ function Brand() {
     <Link className="nav-brand" href="/">
       <Image src="/logo.png" alt="Future Stars" width={52} height={52} style={{ display: "block", objectFit: "contain" }} />
       <div className="word">
-        Future Stars
+        Future Stars High School
         <small className="np-accent">फ्यूचर स्टार्स उ.मा.वि.</small>
       </div>
     </Link>

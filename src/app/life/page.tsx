@@ -1,19 +1,22 @@
+import Image from "next/image";
 import { EditSecHead } from "@/components/HomeSections";
+import { getLifePhotos } from "@/lib/content";
+import { urlFor } from "@/lib/sanity";
 
 export const metadata = {
   title: "Student Life · Future Stars High School",
   description: "Clubs, sport, community research, Himalayan treks, and more. Every student joins at least one club.",
 };
 
-const GALLERY_CELLS = [
-  { cls: "tall navy", lab: "Clubs", title: "Debate · Nepali & English", sub: "Weekly, after class" },
-  { cls: "", lab: "Sport", title: "Football", sub: "" },
-  { cls: "amber", lab: "Arts", title: "Traditional music", sub: "" },
-  { cls: "", lab: "STEM", title: "Robotics", sub: "" },
-  { cls: "navy", lab: "Research", title: "Community research project", sub: "" },
-  { cls: "", lab: "Trek", title: "Himalayan annual trek", sub: "" },
-  { cls: "tall", lab: "Showcase", title: "Grade 10 art exhibition", sub: "Open to parents" },
-  { cls: "", lab: "Sport", title: "Basketball", sub: "" },
+const PLACEHOLDER_CELLS = [
+  { cls: "tall navy", lab: "Clubs", title: "Debate · Nepali & English" },
+  { cls: "", lab: "Sport", title: "Football" },
+  { cls: "amber", lab: "Arts", title: "Traditional music" },
+  { cls: "", lab: "STEM", title: "Robotics" },
+  { cls: "navy", lab: "Research", title: "Community research project" },
+  { cls: "", lab: "Trek", title: "Himalayan annual trek" },
+  { cls: "tall", lab: "Showcase", title: "Grade 10 art exhibition" },
+  { cls: "", lab: "Sport", title: "Basketball" },
 ] as const;
 
 const WEEK = [
@@ -25,7 +28,10 @@ const WEEK = [
   ["Fri", "Half day · class trips · parent-teacher conversations"],
 ] as const;
 
-export default function LifePage() {
+export default async function LifePage() {
+  const lifePhotos = await getLifePhotos();
+  const hasPhotos = lifePhotos.length > 0;
+
   return (
     <main>
       <section className="section">
@@ -37,25 +43,42 @@ export default function LifePage() {
             aside="Every club is student-run, teacher-mentored. Every student joins at least one."
           />
           <div className="life-gallery">
-            {GALLERY_CELLS.map((c, i) => (
-              <div key={i} className={`cell ${c.cls}`}>
-                <div>
-                  <div className="lab">{c.lab}</div>
-                  <div className="title">{c.title}</div>
-                </div>
-              </div>
-            ))}
+            {hasPhotos
+              ? lifePhotos.map((p) => {
+                  const imgUrl = urlFor(p.image)?.width(800).height(800).fit("crop").auto("format").url();
+                  return (
+                    <div key={p._id} className="cell has-photo">
+                      {imgUrl && (
+                        <Image
+                          src={imgUrl}
+                          alt={p.label}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                          style={{ objectFit: "cover" }}
+                        />
+                      )}
+                      <div className="cell-overlay">
+                        <div className="lab">{p.category}</div>
+                        <div className="title">{p.label}</div>
+                      </div>
+                    </div>
+                  );
+                })
+              : PLACEHOLDER_CELLS.map((c, i) => (
+                  <div key={i} className={`cell ${c.cls}`}>
+                    <div>
+                      <div className="lab">{c.lab}</div>
+                      <div className="title">{c.title}</div>
+                    </div>
+                  </div>
+                ))}
           </div>
         </div>
       </section>
 
       <section className="section tint">
         <div className="container">
-          <EditSecHead
-            num="02"
-            eyebrow="A typical week"
-            title="Beyond the classroom."
-          />
+          <EditSecHead num="02" eyebrow="A typical week" title="Beyond the classroom." />
           <div style={{ display: "grid", gap: 16, gridTemplateColumns: "1fr", maxWidth: 800 }}>
             {WEEK.map(([day, text]) => (
               <div
