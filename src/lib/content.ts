@@ -39,6 +39,18 @@ export type Principal = {
   image?: SanityImage;
 };
 
+export type AboutPageImages = {
+  campusPhoto?: SanityImage;
+  historyPhoto1?: SanityImage;
+  historyPhoto2?: SanityImage;
+  aimsPhoto1?: SanityImage;
+  aimsPhoto2?: SanityImage;
+  aimsPhoto3?: SanityImage;
+  aimsPhoto4?: SanityImage;
+  policiesPhoto?: SanityImage;
+  senPhoto?: SanityImage;
+};
+
 const FALLBACK_NEWS: NewsItem[] = [
   {
     id: "open-house-2083",
@@ -141,6 +153,28 @@ export async function getPrincipal(): Promise<Principal> {
     return item ?? FALLBACK_PRINCIPAL;
   } catch {
     return FALLBACK_PRINCIPAL;
+  }
+}
+
+export async function getAboutPage(): Promise<AboutPageImages> {
+  if (!sanityClient) return {};
+  try {
+    const item = await sanityClient.fetch<AboutPageImages | null>(
+      `*[_type == "aboutPage"][0] {
+        campusPhoto { asset, hotspot, crop },
+        historyPhoto1 { asset, hotspot, crop },
+        historyPhoto2 { asset, hotspot, crop },
+        aimsPhoto1 { asset, hotspot, crop },
+        aimsPhoto2 { asset, hotspot, crop },
+        aimsPhoto3 { asset, hotspot, crop },
+        aimsPhoto4 { asset, hotspot, crop },
+        policiesPhoto { asset, hotspot, crop },
+        senPhoto { asset, hotspot, crop }
+      }`
+    );
+    return item ?? {};
+  } catch {
+    return {};
   }
 }
 
