@@ -51,6 +51,15 @@ export type AboutPageImages = {
   senPhoto?: SanityImage;
 };
 
+export type AdmissionsPageImages = {
+  bannerPhoto?: SanityImage;
+  processPhoto?: SanityImage;
+  feesPhoto?: SanityImage;
+  boysUniformPhoto?: SanityImage;
+  girlsUniformPhoto?: SanityImage;
+  openHousePhoto?: SanityImage;
+};
+
 const FALLBACK_NEWS: NewsItem[] = [
   {
     id: "open-house-2083",
@@ -170,6 +179,25 @@ export async function getAboutPage(): Promise<AboutPageImages> {
         aimsPhoto4 { asset, hotspot, crop },
         policiesPhoto { asset, hotspot, crop },
         senPhoto { asset, hotspot, crop }
+      }`
+    );
+    return item ?? {};
+  } catch {
+    return {};
+  }
+}
+
+export async function getAdmissionsPage(): Promise<AdmissionsPageImages> {
+  if (!sanityClient) return {};
+  try {
+    const item = await sanityClient.fetch<AdmissionsPageImages | null>(
+      `*[_type == "admissionsPage"][0] {
+        bannerPhoto { asset, hotspot, crop },
+        processPhoto { asset, hotspot, crop },
+        feesPhoto { asset, hotspot, crop },
+        boysUniformPhoto { asset, hotspot, crop },
+        girlsUniformPhoto { asset, hotspot, crop },
+        openHousePhoto { asset, hotspot, crop }
       }`
     );
     return item ?? {};

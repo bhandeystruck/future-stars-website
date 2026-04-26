@@ -1,25 +1,23 @@
-import { EditSecHead } from "@/components/HomeSections";
+import { AdmissionsBanner, ProcessSection, FeesSection, UniformSection, OpenHouseSection } from "@/components/AdmissionsSections";
 import AdmissionsSection from "@/components/AdmissionsSection";
+import { getAdmissionsPage } from "@/lib/content";
 
 export const metadata = {
   title: "Admissions · Future Stars High School",
   description: "Book a school visit or apply for 2083 BS. Merit scholarships available up to 100% of tuition.",
 };
 
-export default function AdmissionsPage() {
+export default async function AdmissionsPage() {
+  const adm = await getAdmissionsPage();
+
   return (
     <main>
-      <section className="section">
-        <div className="container">
-          <EditSecHead
-            num="01"
-            eyebrow="Admissions · 2083 BS"
-            title="We'd love to show you around."
-            aside="Admissions close 15 Baishakh 2083 (28 Apr 2026). Rolling admissions for Grades 6–10."
-          />
-        </div>
-      </section>
+      <AdmissionsBanner photo={adm.bannerPhoto} />
+      <ProcessSection photo={adm.processPhoto} />
       <AdmissionsSection />
+      <FeesSection photo={adm.feesPhoto} />
+      <UniformSection boysPhoto={adm.boysUniformPhoto} girlsPhoto={adm.girlsUniformPhoto} />
+      <OpenHouseSection photo={adm.openHousePhoto} />
     </main>
   );
 }
