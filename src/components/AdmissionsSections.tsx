@@ -105,9 +105,7 @@ const STEPS = [
   },
 ] as const;
 
-export function ProcessSection({ photo }: { photo?: SanityImage }) {
-  const src = photo ? urlFor(photo)?.width(700).height(520).fit("crop").auto("format").url() : null;
-
+export function ProcessSection() {
   return (
     <section className="section tint">
       <div className="container">
@@ -117,34 +115,20 @@ export function ProcessSection({ photo }: { photo?: SanityImage }) {
           title="Five steps from enquiry to first day."
           aside="The whole process takes under two weeks for most families."
         />
-        <div className="adm-process-layout">
-          {/* Steps */}
-          <div className="adm-steps">
-            {STEPS.map(({ Icon, title, body }, i) => (
-              <div key={title} className="adm-step">
-                <div className="adm-step-left">
-                  <div className="adm-step-num">{i + 1}</div>
-                  {i < STEPS.length - 1 && <div className="adm-step-line" />}
-                </div>
-                <div className="adm-step-content">
-                  <div className="adm-step-icon"><Icon size={18} /></div>
-                  <div className="adm-step-title">{title}</div>
-                  <p className="adm-step-body">{body}</p>
-                </div>
+        <div className="adm-steps">
+          {STEPS.map(({ Icon, title, body }, i) => (
+            <div key={title} className="adm-step">
+              <div className="adm-step-left">
+                <div className="adm-step-num">{i + 1}</div>
+                {i < STEPS.length - 1 && <div className="adm-step-line" />}
               </div>
-            ))}
-          </div>
-
-          {/* Photo */}
-          <div className="adm-process-photo">
-            {src ? (
-              <div style={{ position: "relative", width: "100%", height: "100%" }}>
-                <Image src={src} alt="Classroom visit · Future Stars" fill style={{ objectFit: "cover", borderRadius: "var(--radius-lg)" }} />
+              <div className="adm-step-content">
+                <div className="adm-step-icon"><Icon size={18} /></div>
+                <div className="adm-step-title">{title}</div>
+                <p className="adm-step-body">{body}</p>
               </div>
-            ) : (
-              <PhotoPlaceholder label="Classroom visit · Future Stars" tone="navy" />
-            )}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

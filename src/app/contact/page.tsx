@@ -60,11 +60,16 @@ export default function ContactPage() {
           </div>
 
           <div style={{ marginTop: 32 }}>
-            <div className="map-placeholder">
-              <div className="grid-lines" />
-              <div className="pin" />
-              <div className="label">Future Stars · Kathmandu</div>
-            </div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28267.578834447388!2d85.2768796743164!3d27.672565199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb197dd904d259%3A0x1eb94a1917628795!2sFuture%20Stars%20High%20School!5e0!3m2!1sen!2snp!4v1777376738876!5m2!1sen!2snp"
+              width="100%"
+              height="450"
+              style={{ border: 0, borderRadius: "var(--radius-lg)", display: "block" }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Future Stars High School · Kathmandu"
+            />
           </div>
         </div>
       </section>

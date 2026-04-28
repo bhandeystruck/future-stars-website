@@ -2,21 +2,14 @@ import { defineField, defineType } from "sanity";
 
 export const lifePhotoSchema = defineType({
   name: "lifePhoto",
-  title: "Student Life Photos",
+  title: "Event Photos",
   type: "document",
   fields: [
     defineField({
-      name: "label",
-      title: "Label",
-      type: "string",
-      description: "Short caption shown on the photo",
-      validation: (r) => r.required(),
-    }),
-    defineField({
-      name: "category",
-      title: "Category",
-      type: "string",
-      options: { list: ["Clubs", "Sport", "Arts", "STEM", "Research", "Trek", "Showcase"] },
+      name: "event",
+      title: "Event",
+      type: "reference",
+      to: [{ type: "event" }],
       validation: (r) => r.required(),
     }),
     defineField({
@@ -26,12 +19,26 @@ export const lifePhotoSchema = defineType({
       options: { hotspot: true },
       validation: (r) => r.required(),
     }),
-    defineField({ name: "order", title: "Display order", type: "number" }),
+    defineField({
+      name: "label",
+      title: "Caption (optional)",
+      type: "string",
+      description: "Short caption shown in the lightbox",
+    }),
+    defineField({
+      name: "order",
+      title: "Order within event",
+      type: "number",
+      description: "Lower numbers appear first. Leave blank for auto.",
+    }),
   ],
   orderings: [
-    { title: "Display order", name: "orderAsc", by: [{ field: "order", direction: "asc" }] },
+    { title: "Manual order", name: "orderAsc", by: [{ field: "order", direction: "asc" }] },
   ],
   preview: {
-    select: { title: "label", subtitle: "category", media: "image" },
+    select: { title: "label", subtitle: "event.name", media: "image" },
+    prepare({ title, subtitle, media }) {
+      return { title: title ?? "Untitled photo", subtitle, media };
+    },
   },
 });

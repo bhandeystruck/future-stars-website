@@ -1,6 +1,8 @@
-import Link from "next/link";
 import Image from "next/image";
-import { Award, MapPin, ShieldCheck, Users } from "lucide-react";
+import {
+  ShieldCheck, Award, Bus, Clock,
+  GraduationCap, Trophy, BadgePercent, BookOpen, Leaf, DoorOpen,
+} from "lucide-react";
 import { PhotoPlaceholder, StatBlock } from "./Primitives";
 import type { Principal } from "@/lib/content";
 import { urlFor } from "@/lib/sanity";
@@ -38,27 +40,23 @@ export function EditSecHead({
 }
 
 /* ==========================================================================
-   TrustStrip — four trust items under the hero
+   TrustStrip — credibility & logistics under the hero
    ========================================================================== */
 export function TrustStrip() {
   return (
     <div className="trust">
       <div className="container trust-row">
         <div className="trust-item">
-          <ShieldCheck size={18} />
-          NEB-affiliated since 2064 BS
-        </div>
-        <div className="trust-item">
           <Award size={18} />
-          92% +2 pass rate · last 3 yrs
+          Government-recognized private school
         </div>
         <div className="trust-item">
-          <Users size={18} />
-          1:14 teacher ratio
+          <Bus size={18} />
+          Shuttle from Koteshwor, Baneshwor & Chabahil
         </div>
         <div className="trust-item">
-          <MapPin size={18} />
-          Shuttles from Koteshwor, Baneshwor, Chabahil
+          <Clock size={18} />
+          Open for visits Sun–Fri · 10 am – 3 pm
         </div>
       </div>
     </div>
@@ -66,7 +64,7 @@ export function TrustStrip() {
 }
 
 /* ==========================================================================
-   StatsSection — four big numbers
+   StatsSection — four proof-of-outcome numbers
    ========================================================================== */
 export function StatsSection() {
   return (
@@ -75,14 +73,14 @@ export function StatsSection() {
         <EditSecHead
           num="01"
           eyebrow="By the numbers"
-          title="Real attention, not just small classes."
+          title="Real outcomes, not just small classes."
           aside="These are not projections — this is the last three years of graduates."
         />
         <div className="stat-grid">
-          <StatBlock n="480" label="Students, Grades 6–12" />
-          <StatBlock n="1:14" label="Teacher-to-student ratio" />
-          <StatBlock n="92" suffix="%" label="+2 pass rate (3-yr avg)" />
-          <StatBlock n="2064" label="NEB-affiliated since (BS)" />
+          <StatBlock n="480" label="Students enrolled, Grades 6–12" />
+          <StatBlock n="100" suffix="%" label="Maximum scholarship available" />
+          <StatBlock n="92" suffix="%" label="+2 NEB pass rate, 3-yr avg" />
+          <StatBlock n="9" label="Students scored 3.8+ GPA last cohort" />
         </div>
       </div>
     </section>
@@ -90,56 +88,91 @@ export function StatsSection() {
 }
 
 /* ==========================================================================
-   StreamsSection — Grade 11 stream cards
+   WhySection — "Why choose Future Stars" with center photo + feature pairs
    ========================================================================== */
-const STREAMS = [
+const WHY_LEFT = [
   {
-    pill: "Science",
-    title: "Grade 11 Science",
-    body: "Physics, Chemistry, and Biology or Maths. NEB-aligned labs and a dedicated afternoon study block.",
-    seats: "48 seats",
+    Icon: GraduationCap,
+    title: "19 graduating NEB batches",
+    body: "NEB-affiliated since 2064 BS. Every cohort we have enrolled has reached their board exams here.",
   },
   {
-    pill: "Management",
-    title: "Grade 11 Management",
-    body: "Accountancy, Economics, Business Studies. Real case work with Kathmandu employers in Grade 12.",
-    seats: "40 seats",
+    Icon: Trophy,
+    title: "92% NEB pass rate",
+    body: "Consistent across three consecutive years — above the Kathmandu district average.",
   },
   {
-    pill: "Humanities",
-    title: "Grade 11 Humanities",
-    body: "Nepali, English, Sociology, Political Science. Writing-focused, with a required community research project.",
-    seats: "32 seats",
+    Icon: BadgePercent,
+    title: "Scholarships up to 100%",
+    body: "Academic merit and financial-need awards issued automatically with every offer letter.",
   },
 ] as const;
 
-export function StreamsSection() {
+const WHY_RIGHT = [
+  {
+    Icon: BookOpen,
+    title: "34 subject-specialist teachers",
+    body: "Every subject taught by a qualified specialist from your child's very first day.",
+  },
+  {
+    Icon: Leaf,
+    title: "Whole-child afternoons",
+    body: "A daily study block, weekly clubs, and an annual Himalayan trek built into every school year.",
+  },
+  {
+    Icon: DoorOpen,
+    title: "Open door — always",
+    body: "The principal is available every Friday. Parent messages replied within one school day.",
+  },
+] as const;
+
+export function WhySection({ whyPhoto }: { whyPhoto?: Parameters<typeof urlFor>[0] }) {
+  const src = whyPhoto
+    ? urlFor(whyPhoto)?.width(480).height(640).fit("crop").auto("format").url()
+    : null;
+
   return (
-    <section className="section tint">
-      <div className="container">
-        <EditSecHead
-          num="02"
-          eyebrow="Grade 11 streams · 2083 BS"
-          title="Three streams. One family of teachers."
-          aside="Every stream meets the same afternoon study block and shares the same clubs."
-        />
-        <div className="stream-grid">
-          {STREAMS.map((s) => (
-            <article key={s.pill} className="stream">
-              <div className="photo">
-                <PhotoPlaceholder label={`${s.pill} classroom`} />
-              </div>
-              <div className="body">
-                <span className="pill">{s.pill} stream</span>
-                <h3>{s.title}</h3>
-                <p>{s.body}</p>
-                <div className="foot">
-                  <span>{s.seats} · 2083 BS</span>
-                  <Link href="/programs">Read more →</Link>
+    <section className="why-section">
+      <div className="container" style={{ position: "relative" }}>
+        <div className="why-header">
+          <div className="eyebrow" style={{ color: "var(--color-accent)" }}>Paving the way for a new generation of stars.</div>
+          <h2 className="why-h2">Why choose <strong>Future Stars.</strong></h2>
+        </div>
+        <div className="why-grid">
+          {/* Left column */}
+          <div className="why-col why-col--left">
+            {WHY_LEFT.map(({ Icon, title, body }) => (
+              <div key={title} className="why-feature">
+                <div className="why-num"><Icon size={20} /></div>
+                <div>
+                  <p className="why-feature-title">{title}</p>
+                  <p className="why-feature-body">{body}</p>
                 </div>
               </div>
-            </article>
-          ))}
+            ))}
+          </div>
+
+          {/* Center photo */}
+          <div className="why-photo-col">
+            {src ? (
+              <Image src={src} alt="Future Stars student" fill style={{ objectFit: "cover" }} />
+            ) : (
+              <PhotoPlaceholder label="Future Stars student" tone="navy" />
+            )}
+          </div>
+
+          {/* Right column */}
+          <div className="why-col why-col--right">
+            {WHY_RIGHT.map(({ Icon, title, body }) => (
+              <div key={title} className="why-feature">
+                <div className="why-num"><Icon size={20} /></div>
+                <div>
+                  <p className="why-feature-title">{title}</p>
+                  <p className="why-feature-body">{body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -163,7 +196,6 @@ export function TestimonialSection() {
             <strong>Sunita Karki</strong> · Parent, Grade 11 Science · Baneshwor
           </div>
         </div>
-        
       </div>
     </section>
   );
@@ -228,7 +260,7 @@ export function MissionBand() {
         </h2>
         <p style={{ marginTop: 20 }}>
           Future Stars opened in 2064 BS with 38 students in a single building
-          in Lalitpur. Today we are Grades 1–10 — connected enough that every
+          in Lalitpur. Today we are Grades 6–12 — connected enough that every
           teacher knows every student by name.
         </p>
         <div className="mission-grid">

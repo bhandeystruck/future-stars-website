@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Calendar, CalendarDays, Camera, MessageCircle } from "lucide-react";
 import {
   Button,
@@ -6,6 +7,8 @@ import {
   BSDate,
   PhotoPlaceholder,
 } from "./Primitives";
+import { urlFor } from "@/lib/sanity";
+import type { SanityImage } from "@/lib/sanity";
 
 export type HeroVariant = "editorial" | "split" | "bleed" | "stat";
 
@@ -113,10 +116,19 @@ function HeroSplit() {
 /* ==========================================================================
    Full-bleed — navy bg, photo-as-backdrop
    ========================================================================== */
-function HeroBleed() {
+function HeroBleed({ heroPhoto }: { heroPhoto?: SanityImage }) {
+  const src = heroPhoto
+    ? urlFor(heroPhoto)?.width(1600).height(900).fit("crop").auto("format").url()
+    : null;
+
   return (
     <section className="hero-bleed">
-      <div className="photo-bg" />
+      <div className={`photo-bg${src ? " has-photo" : ""}`}>
+        {src && (
+          <Image src={src} alt="Future Stars campus" fill style={{ objectFit: "cover", zIndex: 0 }} priority />
+        )}
+        {src && <div className="bleed-gradient" />}
+      </div>
       <div className="container bleed-inner">
         <Pill tone="amber" icon={Calendar}>
           Admissions open · 2083 BS
@@ -156,8 +168,8 @@ function HeroBleed() {
           </div>
           <div className="bleed-stat-sep" />
           <div className="bleed-stat">
-            <strong>2064 BS</strong>
-            <span>NEB-affiliated since</span>
+            <strong>2037 BS</strong>
+            <span>Opened its gate to first set of pupils</span>
           </div>
         </div>
       </div>
@@ -192,8 +204,8 @@ function HeroStat() {
             <div className="l">+2 pass rate · 3-yr avg</div>
           </div>
           <div>
-            <div className="n">2064</div>
-            <div className="l">NEB-affiliated (BS)</div>
+            <div className="n">2037</div>
+            <div className="l">School Founded</div>
           </div>
         </div>
         <div
@@ -229,14 +241,16 @@ function HeroStat() {
    ========================================================================== */
 export default function HeroSwitcher({
   variant = "bleed",
+  heroPhoto,
 }: {
   variant?: HeroVariant;
+  heroPhoto?: SanityImage;
 }) {
   switch (variant) {
     case "split":
       return <HeroSplit />;
     case "bleed":
-      return <HeroBleed />;
+      return <HeroBleed heroPhoto={heroPhoto} />;
     case "stat":
       return <HeroStat />;
     case "editorial":

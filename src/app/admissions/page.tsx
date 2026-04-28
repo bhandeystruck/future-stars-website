@@ -13,7 +13,7 @@ export default async function AdmissionsPage() {
   return (
     <main>
       <AdmissionsBanner photo={adm.bannerPhoto} />
-      <ProcessSection photo={adm.processPhoto} />
+      <ProcessSection />
       <AdmissionsSection />
       <FeesSection photo={adm.feesPhoto} />
       <UniformSection boysPhoto={adm.boysUniformPhoto} girlsPhoto={adm.girlsUniformPhoto} />

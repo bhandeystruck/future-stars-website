@@ -9,7 +9,6 @@ export const admissionsPageSchema = defineType({
   type: "document",
   fields: [
     img("bannerPhoto",      "Banner photo — school entrance (portrait, right side of hero)"),
-    img("processPhoto",     "Application process photo — classroom / school visit (landscape)"),
     img("feesPhoto",        "Fees & scholarships wide photo — library, hallway, or classroom"),
     img("boysUniformPhoto", "Boys uniform photo — full uniform head to toe (portrait 3:4)"),
     img("girlsUniformPhoto","Girls uniform photo — full uniform head to toe (portrait 3:4)"),

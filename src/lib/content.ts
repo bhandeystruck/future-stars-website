@@ -22,11 +22,23 @@ export type Teacher = {
   image?: SanityImage;
 };
 
-export type LifePhoto = {
+export type EventPhoto = {
+  _key: string;
+  asset: SanityImage["asset"];
+  hotspot?: SanityImage["hotspot"];
+  crop?: SanityImage["crop"];
+};
+
+export type SchoolEvent = {
   _id: string;
-  label: string;
+  name: string;
+  slug: string;
+  date: string;
   category: string;
-  image: SanityImage;
+  description?: string;
+  coverPhoto?: SanityImage;
+  photoCount: number;
+  photos?: EventPhoto[];
 };
 
 export type Principal = {
@@ -51,13 +63,33 @@ export type AboutPageImages = {
   senPhoto?: SanityImage;
 };
 
+export type HomePageImages = {
+  heroPhoto?: SanityImage;
+  whyPhoto?: SanityImage;
+};
+
 export type AdmissionsPageImages = {
   bannerPhoto?: SanityImage;
-  processPhoto?: SanityImage;
   feesPhoto?: SanityImage;
   boysUniformPhoto?: SanityImage;
   girlsUniformPhoto?: SanityImage;
   openHousePhoto?: SanityImage;
+};
+
+export type FacilitiesPageImages = {
+  auditoriumPhoto?: SanityImage;
+  computerLabPhoto?: SanityImage;
+  scienceLabPhoto?: SanityImage;
+  libraryPhoto?: SanityImage;
+  cafeteriaPhoto?: SanityImage;
+};
+
+export type ClubsPageImages = {
+  artsPhoto?: SanityImage;
+  karatePhoto?: SanityImage;
+  musicPhoto?: SanityImage;
+  sportsPhoto?: SanityImage;
+  vofsPhoto?: SanityImage;
 };
 
 const FALLBACK_NEWS: NewsItem[] = [
@@ -187,13 +219,27 @@ export async function getAboutPage(): Promise<AboutPageImages> {
   }
 }
 
+export async function getHomePage(): Promise<HomePageImages> {
+  if (!sanityClient) return {};
+  try {
+    const item = await sanityClient.fetch<HomePageImages | null>(
+      `*[_type == "homePage"][0] {
+        heroPhoto { asset, hotspot, crop },
+        whyPhoto { asset, hotspot, crop }
+      }`
+    );
+    return item ?? {};
+  } catch {
+    return {};
+  }
+}
+
 export async function getAdmissionsPage(): Promise<AdmissionsPageImages> {
   if (!sanityClient) return {};
   try {
     const item = await sanityClient.fetch<AdmissionsPageImages | null>(
       `*[_type == "admissionsPage"][0] {
         bannerPhoto { asset, hotspot, crop },
-        processPhoto { asset, hotspot, crop },
         feesPhoto { asset, hotspot, crop },
         boysUniformPhoto { asset, hotspot, crop },
         girlsUniformPhoto { asset, hotspot, crop },
@@ -206,16 +252,70 @@ export async function getAdmissionsPage(): Promise<AdmissionsPageImages> {
   }
 }
 
-export async function getLifePhotos(): Promise<LifePhoto[]> {
+export async function getFacilitiesPage(): Promise<FacilitiesPageImages> {
+  if (!sanityClient) return {};
+  try {
+    const item = await sanityClient.fetch<FacilitiesPageImages | null>(
+      `*[_type == "facilitiesPage"][0] {
+        auditoriumPhoto { asset, hotspot, crop },
+        computerLabPhoto { asset, hotspot, crop },
+        scienceLabPhoto { asset, hotspot, crop },
+        libraryPhoto { asset, hotspot, crop },
+        cafeteriaPhoto { asset, hotspot, crop }
+      }`
+    );
+    return item ?? {};
+  } catch {
+    return {};
+  }
+}
+
+export async function getClubsPage(): Promise<ClubsPageImages> {
+  if (!sanityClient) return {};
+  try {
+    const item = await sanityClient.fetch<ClubsPageImages | null>(
+      `*[_type == "clubsPage"][0] {
+        artsPhoto { asset, hotspot, crop },
+        karatePhoto { asset, hotspot, crop },
+        musicPhoto { asset, hotspot, crop },
+        sportsPhoto { asset, hotspot, crop },
+        vofsPhoto { asset, hotspot, crop }
+      }`
+    );
+    return item ?? {};
+  } catch {
+    return {};
+  }
+}
+
+export async function getEvents(): Promise<SchoolEvent[]> {
   if (!sanityClient) return [];
   try {
-    return await sanityClient.fetch<LifePhoto[]>(
-      `*[_type == "lifePhoto"] | order(order asc) {
-        _id, label, category,
-        image { asset, hotspot, crop }
+    return await sanityClient.fetch<SchoolEvent[]>(
+      `*[_type == "event"] | order(date desc) {
+        _id, name, "slug": slug.current, date, category, description,
+        coverPhoto { asset, hotspot, crop },
+        "photoCount": count(photos)
       }`
     );
   } catch {
     return [];
+  }
+}
+
+export async function getEventBySlug(slug: string): Promise<SchoolEvent | null> {
+  if (!sanityClient) return null;
+  try {
+    return await sanityClient.fetch<SchoolEvent | null>(
+      `*[_type == "event" && slug.current == $slug][0] {
+        _id, name, "slug": slug.current, date, category, description,
+        coverPhoto { asset, hotspot, crop },
+        "photoCount": count(photos),
+        photos[] { _key, asset, hotspot, crop }
+      }`,
+      { slug }
+    );
+  } catch {
+    return null;
   }
 }

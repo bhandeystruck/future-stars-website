@@ -28,7 +28,10 @@ export default function Footer() {
                 <Link href="/admissions">Admissions 2083 BS</Link>
               </li>
               <li>
-                <Link href="/life">Student life</Link>
+                <Link href="/facilities">Facilities</Link>
+              </li>
+              <li>
+                <Link href="/gallery">Photo gallery</Link>
               </li>
               <li>
                 <Link href="/about">About the school</Link>
